@@ -1,83 +1,7 @@
 # 实验一 HDFS Java API 与 MapReduce 程序
 
-本目录包含实验一中需要编程的两部分：
 
-- 第二部分：`HdfsOperations.java`，通过 HDFS Java API 实现常用文件操作。
-- 第三部分：3 个 MapReduce 程序，分别完成合并去重、整数排序和祖孙关系挖掘。
-
-以下命令假设：
-
-- 虚拟机用户是 `hadoop`。
-- Hadoop 安装在 `/usr/local/hadoop`。
-- HDFS 用户目录是 `/user/hadoop`。
-- 项目被传到 `/home/hadoop/experiment1-hadoop-java`。
-
-如果你的用户名或 Hadoop 安装目录不同，请替换相应路径。
-
-## 一 将项目传入虚拟机
-
-在 Windows PowerShell 中进入本项目的上一级目录，然后执行：
-
-```powershell
-cd "C:\Users\huashuo\Desktop\大数据管理与分析experiments"
-scp -r ".\experiment1-hadoop-java" hadoop@虚拟机IP:/home/hadoop/
-```
-
-把命令中的 `虚拟机IP` 替换成实际地址，例如 `192.168.56.101`。如果使用 VMware 共享文件夹，也可以直接把整个 `experiment1-hadoop-java` 目录复制到 `/home/hadoop/`。
-
-也可以只传已经生成的 ZIP 文件。在 Windows PowerShell 中执行：
-
-```powershell
-scp ".\experiment1-hadoop-java.zip" hadoop@虚拟机IP:/home/hadoop/
-```
-
-然后在虚拟机终端中解压：
-
-```bash
-cd /home/hadoop
-```
-
-```bash
-unzip experiment1-hadoop-java.zip
-```
-
-## 二 登录虚拟机并检查环境
-
-下面的命令都在虚拟机终端中执行。
-
-进入项目目录：
-
-```bash
-cd /home/hadoop/experiment1-hadoop-java
-```
-
-设置 Hadoop 环境变量：
-
-```bash
-export HADOOP_HOME=/usr/local/hadoop
-```
-
-```bash
-export PATH="$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
-```
-
-检查 Java、Java 编译器和 Hadoop：
-
-```bash
-java -version
-```
-
-```bash
-javac -version
-```
-
-```bash
-hadoop version
-```
-
-如果 `javac` 不存在，说明虚拟机只安装了 JRE，需要安装与当前环境匹配的 JDK 后再继续。
-
-## 三 启动 Hadoop
+## 一 启动 Hadoop
 
 启动 HDFS：
 
@@ -111,7 +35,7 @@ hdfs dfs -mkdir -p /user/hadoop
 hdfs dfs -ls /user/hadoop
 ```
 
-## 四 编译全部 Java 程序
+## 二 编译全部 Java 程序
 
 确认当前目录：
 
@@ -157,7 +81,7 @@ jar -tf build/experiment1.jar
 
 如果能看到 `HdfsOperations.class`、`MergeDistinct.class`、`IntegerSort.class` 和 `GrandchildRelationship.class`，说明编译和打包成功。
 
-## 五 第二部分 HDFS Java API 操作
+## 三 第二部分 HDFS Java API 操作
 
 设置本次实验的 HDFS 根目录：
 
@@ -355,7 +279,7 @@ hadoop jar build/experiment1.jar HdfsOperations stat "$BASE/moved/demo-moved.txt
 hadoop jar build/experiment1.jar HdfsOperations move "$BASE/moved/demo-moved.txt" "$BASE/hdfs-api/demo.txt"
 ```
 
-## 六 第二部分对应的 HDFS Shell 命令
+## 四 第二部分对应的 HDFS Shell 命令
 
 文档要求使用 Shell 命令完成相同任务。以下命令使用单独的 `$BASE/shell` 目录，避免影响 Java API 的测试结果。
 
@@ -501,7 +425,7 @@ hdfs dfs -mv "$BASE/shell/demo.txt" "$BASE/shell/moved/demo-moved.txt"
 hdfs dfs -ls "$BASE/shell/moved"
 ```
 
-## 七 第三部分 MapReduce 程序
+## 五 第三部分 MapReduce 程序
 
 ### 任务一 文件合并与去重
 
@@ -619,7 +543,7 @@ hdfs dfs -cat "$BASE/mapreduce/family/output/part-r-00000"
 
 输出第一行为 `grandchild grandparent`，后面是计算得到的祖孙关系。
 
-## 八 查看全部实验文件
+## 六 查看全部实验文件
 
 ```bash
 hdfs dfs -ls -R "$BASE"
@@ -631,71 +555,7 @@ hdfs dfs -ls -R "$BASE"
 hdfs dfs -get "$BASE/mapreduce/sort/output/part-r-00000" downloads/integer-sort-result.txt
 ```
 
-## 九 上传代码到 GitHub
-
-以下命令只上传源码、示例数据和说明文档，`.gitignore` 会排除编译产物和下载结果。
-
-进入项目目录：
-
-```bash
-cd /home/hadoop/experiment1-hadoop-java
-```
-
-初始化仓库：
-
-```bash
-git init
-```
-
-如果 Git 提示没有设置用户信息，执行：
-
-```bash
-git config user.name "你的GitHub用户名"
-```
-
-```bash
-git config user.email "你的邮箱"
-```
-
-添加文件：
-
-```bash
-git add .
-```
-
-检查将要提交的文件：
-
-```bash
-git status
-```
-
-提交：
-
-```bash
-git commit -m "Complete experiment 1 HDFS and MapReduce programs"
-```
-
-把默认分支改成 `main`：
-
-```bash
-git branch -M main
-```
-
-在 GitHub 网站上新建一个公开且为空的仓库，然后执行下面命令。请替换用户名和仓库名：
-
-```bash
-git remote add origin https://github.com/你的GitHub用户名/你的仓库名.git
-```
-
-推送：
-
-```bash
-git push -u origin main
-```
-
-最后把 GitHub 仓库页面链接放入实验报告。
-
-## 十 常见错误
+## 七 常见错误
 
 ### 输出目录已经存在
 
@@ -726,13 +586,3 @@ jps
 ```bash
 start-dfs.sh
 ```
-
-### HDFS 权限不足
-
-确认当前用户：
-
-```bash
-whoami
-```
-
-本说明默认使用 `hadoop` 用户，并把实验数据放在 `/user/hadoop/exp1` 下。
