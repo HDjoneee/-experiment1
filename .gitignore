@@ -1,0 +1,7 @@
+build/
+downloads/
+*.class
+*.jar
+.idea/
+.vscode/
+
